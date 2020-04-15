@@ -10,12 +10,16 @@ namespace TestProject01
     {
 
         private ChromeDriver driver;
-        private IWebElement popupElement => driver.FindElement(By.CssSelector("#editable_popup[style*='display: block;'] .close"));
-        private IWebElement loginForm => driver.FindElement(By.CssSelector(".need2login"));
-        private IWebElement loginField => driver.FindElement(By.CssSelector("#login_form [name='email']"));
-        private IWebElement passwordField => driver.FindElement(By.CssSelector("#login_form [name='password']"));
-        private IWebElement buttonLogin => driver.FindElement(By.CssSelector("#login_form .btn-primary"));
-
+        IWebElement popupElement => driver.FindElement(By.CssSelector("#editable_popup[style*='display: block;'] .close"));
+        IWebElement loginForm => driver.FindElement(By.CssSelector(".need2login"));
+        IWebElement loginField => driver.FindElement(By.CssSelector("#login_form [name='email']"));
+        IWebElement passwordField => driver.FindElement(By.CssSelector("#login_form [name='password']"));
+        IWebElement buttonLogin => driver.FindElement(By.CssSelector("#login_form .btn-primary"));
+        IWebElement buttonCatsCategory => driver.FindElement(By.CssSelector(".title [href*='katalogas/katems']"));
+        IWebElement purchaseItem => driver.FindElement(By.CssSelector("#products_column > div.product_listing > div > div:nth-child(1) > a > span.img-wrapper > span > img"));
+        IWebElement buttonAddToCart => driver.FindElement(By.CssSelector("#add2cart_button"));
+        IWebElement cart => driver.FindElement(By.Id("cart_info"));
+        
         [SetUp]
         public void Driver()
         {
@@ -30,7 +34,6 @@ namespace TestProject01
         [Test]
         public void LoginTest()
         {
-            
             popupElement.Click();
             Thread.Sleep(5000);
             loginForm.Click();
@@ -44,23 +47,14 @@ namespace TestProject01
 
         [Test]
         public void TestToAddItem()
-        {
-                        
-            popupElement.Click();
-            var buttonCatsCategory = driver.FindElement(By.CssSelector(".title [href*='katalogas/katems']"));
-            buttonCatsCategory.Click();
-
-            var purchaseItem = driver.FindElement(By.CssSelector("#products_column > div.product_listing > div > div:nth-child(1) > a > span.img-wrapper > span > img"));
-            purchaseItem.Click();
-
-            var buttonAddToCart = driver.FindElement(By.CssSelector("#add2cart_button"));
-            buttonAddToCart.Click();
-
-            var cart = driver.FindElement(By.Id("cart_info"));
+        {         
+            popupElement.Click();                     
+            buttonCatsCategory.Click();                        
+            purchaseItem.Click();            
+            buttonAddToCart.Click();            
             cart.Click();
 
             Assert.AreEqual("1", driver.FindElement(By.CssSelector("#cart_info .cnt")).Text);
-
         }
 
         [TearDown]
