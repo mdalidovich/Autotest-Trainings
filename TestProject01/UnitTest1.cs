@@ -3,7 +3,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading;
-using System.Collections.Generic;
 
 namespace TestProject01
 {
@@ -13,6 +12,9 @@ namespace TestProject01
         private ChromeDriver driver;
         private IWebElement popupElement => driver.FindElement(By.CssSelector("#editable_popup[style*='display: block;'] .close"));
         private IWebElement loginForm => driver.FindElement(By.CssSelector(".need2login"));
+        private IWebElement loginField => driver.FindElement(By.CssSelector("#login_form [name='email']"));
+        private IWebElement passwordField => driver.FindElement(By.CssSelector("#login_form [name='password']"));
+        private IWebElement buttonLogin => driver.FindElement(By.CssSelector("#login_form .btn-primary"));
 
         [SetUp]
         public void Driver()
@@ -26,51 +28,39 @@ namespace TestProject01
         }
 
         [Test]
-        public void Login()
+        public void LoginTest()
         {
-            //remove pop-up
-            //driver.FindElement(By.CssSelector("#editable_popup[style*='display: block;'] .close")).Click();
+            
             popupElement.Click();
-
-            //request the log in window
             Thread.Sleep(5000);
-            //driver.FindElement(By.CssSelector(".need2login")).Click();
-
             loginForm.Click();
-
-            //enter login credentials
-            //driver.FindElement(By.CssSelector("#login_form [name='email']")).SendKeys("mail.for.emails@gmail.com");
-            IWebElement loginField = driver.FindElement(By.CssSelector("#login_form [name='email']"));
-            loginField.Click();
-
+            loginField.SendKeys("mail.for.emails@gmail.com");
             Thread.Sleep(5000);
-
-            //driver.FindElement(By.CssSelector("#login_form [name='password']")).SendKeys("password123");
-            IWebElement fieldPassword = driver.FindElement(By.CssSelector("#login_form [name='password']"));
-            fieldPassword.Click();
-
-            //driver.FindElement(By.CssSelector("#login_form .btn-primary")).Click();
-            IWebElement buttonLogin = driver.FindElement(By.CssSelector("#login_form .btn-primary"));
+            passwordField.SendKeys("password123");                        
             buttonLogin.Click();
+
+            Assert.IsNotNull(driver.FindElementByCssSelector("#profile_menu.dropdown"), "User is not logged in");
         }
 
         [Test]
-        public void Test1()
+        public void TestToAddItem()
         {
-            Thread.Sleep(5000);
+                        
+            popupElement.Click();
+            var buttonCatsCategory = driver.FindElement(By.CssSelector(".title [href*='katalogas/katems']"));
+            buttonCatsCategory.Click();
 
-            //remove pop-up again
-            driver.FindElement(By.CssSelector("#editable_popup[style*='display: block;'] .close")).Click();
+            var purchaseItem = driver.FindElement(By.CssSelector("#products_column > div.product_listing > div > div:nth-child(1) > a > span.img-wrapper > span > img"));
+            purchaseItem.Click();
 
-            //press on the cats' category
-            driver.FindElement(By.CssSelector(".title [href*='katalogas/katems']")).Click();
+            var buttonAddToCart = driver.FindElement(By.CssSelector("#add2cart_button"));
+            buttonAddToCart.Click();
 
-            //press on the first item on the page
-            driver.FindElement(By.CssSelector("#products_column > div.product_listing > div > div:nth-child(1) > a > span.img-wrapper > span > img")).Click();
-            
-            //add item to the cart
-            driver.FindElement(By.CssSelector("#add2cart_button")).Click();
-                                    
+            var cart = driver.FindElement(By.Id("cart_info"));
+            cart.Click();
+
+            Assert.AreEqual("1", driver.FindElement(By.CssSelector("#cart_info .cnt")).Text);
+
         }
 
         [TearDown]
