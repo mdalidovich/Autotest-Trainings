@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading;
+using TestProject01.Pages;
 
 namespace TestProject01
 {
@@ -10,51 +11,57 @@ namespace TestProject01
     {
 
         private ChromeDriver driver;
-        IWebElement popupElement => driver.FindElement(By.CssSelector("#editable_popup[style*='display: block;'] .close"));
-        IWebElement loginForm => driver.FindElement(By.CssSelector(".need2login"));
-        IWebElement loginField => driver.FindElement(By.CssSelector("#login_form [name='email']"));
-        IWebElement passwordField => driver.FindElement(By.CssSelector("#login_form [name='password']"));
-        IWebElement buttonLogin => driver.FindElement(By.CssSelector("#login_form .btn-primary"));
-        IWebElement buttonCatsCategory => driver.FindElement(By.CssSelector(".title [href*='katalogas/katems']"));
-        IWebElement purchaseItem => driver.FindElement(By.CssSelector("#products_column > div.product_listing > div > div:nth-child(1) > a > span.img-wrapper > span > img"));
-        IWebElement buttonAddToCart => driver.FindElement(By.CssSelector("#add2cart_button"));
-        IWebElement cart => driver.FindElement(By.Id("cart_info"));
-        
+        private KikaHomepage kikaHomepage;
+        private PopUpModal popUpModal;
+        private CartPage cartPage;
+      
+
         [SetUp]
         public void Driver()
         {
             var options = new ChromeOptions();
             options.AddArguments("incognito", "start-maximized");
             driver = new ChromeDriver(options);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(50);
 
-            driver.Url = "https://www.kika.lt/";
+            //driver.Url = "https://www.kika.lt/";
+
+            kikaHomepage = new KikaHomepage(driver);
+            kikaHomepage.GoTo();
+            popUpModal = new PopUpModal(driver);
+            cartPage = new CartPage(driver);
+            
         }
 
         [Test]
         public void LoginTest()
         {
-            popupElement.Click();
-            Thread.Sleep(5000);
-            loginForm.Click();
-            loginField.SendKeys("mail.for.emails@gmail.com");
-            Thread.Sleep(5000);
-            passwordField.SendKeys("password123");                        
-            buttonLogin.Click();
+            popUpModal.ClickPopUpModal();
+           
 
-            Assert.IsNotNull(driver.FindElementByCssSelector("#profile_menu.dropdown"), "User is not logged in");
+            kikaHomepage
+                .RequestLoginForm()            
+                .EnterEmail("mail.for.emails@gmail.com")
+                .EnterPassword("password123")
+                .ClickLogin()
+                .AssertMenuExists();
         }
 
         [Test]
         public void TestToAddItem()
         {         
-            popupElement.Click();                     
-            buttonCatsCategory.Click();                        
-            purchaseItem.Click();            
-            buttonAddToCart.Click();            
-            cart.Click();
+            popUpModal.ClickPopUpModal();
 
-            Assert.AreEqual("1", driver.FindElement(By.CssSelector("#cart_info .cnt")).Text);
+            kikaHomepage.ClickButtonCats();
+                                 
+            cartPage
+                .ClickOnItem()
+                .ClickAddToCartButton();
+
+            kikaHomepage
+                .ClickOnCart()
+                .AssertCountCartItems(1);
+            
         }
 
         [TearDown]
@@ -63,6 +70,6 @@ namespace TestProject01
             driver.Quit();
         }
 
-       
+   
     }
 }
