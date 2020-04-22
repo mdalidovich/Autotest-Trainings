@@ -12,17 +12,22 @@ namespace TestProject01.Pages
         
         IWebElement menuElement => driver.FindElement(By.CssSelector("#profile_menu.dropdown"));
 
-        IWebElement loginForm => driver.FindElement(By.CssSelector(".need2login"));
+        
         IWebElement buttonCatsCategory => driver.FindElement(By.CssSelector(".title [href*='katalogas/katems']"));
 
         IWebElement cartElement => driver.FindElement(By.Id("cart_info"));             
-        IWebElement iconCountElement => driver.FindElement(By.CssSelector("#cart-info .cnt"));
+        
+
+        
+
 
         public KikaHomepage GoTo()
         {
             driver.Url = "https://www.kika.lt/";
             return this;
         }
+
+        
     
         public KikaHomepage AssertMenuExists()
         {
@@ -30,11 +35,7 @@ namespace TestProject01.Pages
             return this;
         }
 
-        public LoginPage RequestLoginForm()
-        {
-            loginForm.Click();
-            return new LoginPage(driver);
-        }
+        
 
         public void ClickButtonCats()
         {
@@ -47,11 +48,7 @@ namespace TestProject01.Pages
             return this;
         }
 
-        public KikaHomepage AssertCountCartItems(int count)
-        {
-            Assert.AreEqual(count.ToString(), iconCountElement.Text);
-            return this;
-        }
+        
 
 
     }
