@@ -21,6 +21,7 @@ namespace TestProject01.Pages
         public KikaHomepage GoTo()
         {
             driver.Url = "https://www.kika.lt/";
+            return this;
         }
     
         public KikaHomepage AssertMenuExists()
