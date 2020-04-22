@@ -1,21 +1,15 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Threading;
 
 namespace TestProject01.Pages
 {
-    
-    public class KikaHomepage
+
+    public class KikaHomepage : BasePage
     {
-        private ChromeDriver driver;
-
-        public KikaHomepage(ChromeDriver driver)
-        {
-            this.driver = driver;
-        }
-
+        
+        public KikaHomepage(IWebDriver driver) : base(driver) { }
+        
         IWebElement menuElement => driver.FindElement(By.CssSelector("#profile_menu.dropdown"));
 
         IWebElement loginForm => driver.FindElement(By.CssSelector(".need2login"));

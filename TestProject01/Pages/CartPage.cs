@@ -6,14 +6,10 @@ using System.Text;
 
 namespace TestProject01.Pages
 {
-    public class CartPage
+    public class CartPage : BasePage
     {
-        private ChromeDriver driver;
-
-        public CartPage (ChromeDriver driver)
-        {
-            this.driver = driver;
-        }
+        public CartPage (IWebDriver driver) : base(driver) { }
+        
 
         IWebElement purchaseItem => driver.FindElement(By.CssSelector("#products_column > div.product_listing > div > div:nth-child(1) > a > span.img-wrapper > span > img"));
         IWebElement buttonAddToCart => driver.FindElement(By.CssSelector("#add2cart_button"));

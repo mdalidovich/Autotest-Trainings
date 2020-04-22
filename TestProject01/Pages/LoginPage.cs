@@ -6,15 +6,10 @@ using System.Text;
 
 namespace TestProject01.Pages
 {
-    public class LoginPage
+    public class LoginPage : BasePage
     {
-        private ChromeDriver driver;
-
-        public LoginPage(ChromeDriver driver)
-        {
-            this.driver = driver;
-        }
-
+        public LoginPage(IWebDriver driver) : base(driver) { }
+      
         private const string LoginId = "login_form";
         
         IWebElement loginField => driver.FindElement(By.CssSelector($"#{LoginId} [name='email']"));
