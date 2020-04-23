@@ -10,7 +10,7 @@ namespace TestProject01.Pages
     {
         public LoginPage(IWebDriver driver) : base(driver) { }
       
-        private const string LoginId = "login_form";
+        public const string LoginId = "login_form";
         
         IWebElement loginField => driver.FindElement(By.CssSelector($"#{LoginId} [name='email']"));
         IWebElement passwordField => driver.FindElement(By.CssSelector($"#{LoginId} [name='password']"));
@@ -20,6 +20,7 @@ namespace TestProject01.Pages
         {
             EnterEmail(email);
             EnterPassword(password);
+            ClickLogin().Header.AssertMenuExists();
             return ClickLogin();
 
         }

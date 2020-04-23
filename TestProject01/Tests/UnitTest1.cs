@@ -14,14 +14,14 @@ namespace TestProject01
         public void LoginTest()
         {
             popUpModal.ClickPopUpModal();
-           
 
-            kikaHomepage
-                .RequestLoginForm()            
+
+            kikaHomepage.Header
+                .RequestLoginForm()
                 .EnterEmail("mail.for.emails@gmail.com")
                 .EnterPassword("password123")
                 .ClickLogin()
-                .AssertMenuExists();
+                .Header.AssertMenuExists();
         }
 
         [Test]
@@ -35,9 +35,10 @@ namespace TestProject01
                 .ClickOnItem()
                 .ClickAddToCartButton();
 
-            kikaHomepage
-                .ClickOnCart()
-                .AssertCountCartItems(1);
+            kikaHomepage.Header
+                .ClickOnCart();
+
+            kikaHomepage.Header.AssertCountCartItems(1);
             
         }
 

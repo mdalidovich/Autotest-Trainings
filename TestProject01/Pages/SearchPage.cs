@@ -7,15 +7,18 @@ namespace TestProject01.Pages
 {
     public class SearchPage : BasePage
     {
-        protected SearchPage(IWebDriver driver) : base(driver)
+        public SearchPage(IWebDriver driver) : base(driver)
         {
         }
 
         IWebElement searchInputElement => driver.FindElement(By.CssSelector("#quick_search.active [name='search']"));
+        IWebElement searchButton => driver.FindElement(By.CssSelector("#quick_search [type = 'submit']"));
 
         public void Search(string textCanin)
         {
             searchInputElement.SendKeys(textCanin);
+            //searchInputElement.Submit();
+            searchButton.Click();
         }
     }
 }

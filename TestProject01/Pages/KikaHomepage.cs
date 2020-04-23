@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using TestProject01.Utilities;
 
 namespace TestProject01.Pages
 {
@@ -9,17 +10,10 @@ namespace TestProject01.Pages
     {
         
         public KikaHomepage(IWebDriver driver) : base(driver) { }
-        
-        IWebElement menuElement => driver.FindElement(By.CssSelector("#profile_menu.dropdown"));
-
-        
+                        
         IWebElement buttonCatsCategory => driver.FindElement(By.CssSelector(".title [href*='katalogas/katems']"));
 
-        IWebElement cartElement => driver.FindElement(By.Id("cart_info"));             
-        
-
-        
-
+        public KikaHeaderSection Header => new KikaHeaderSection(driver);
 
         public KikaHomepage GoTo()
         {
@@ -27,29 +21,24 @@ namespace TestProject01.Pages
             return this;
         }
 
-        
-    
-        public KikaHomepage AssertMenuExists()
+        public KikaHomepage Login(User user)
         {
-            Assert.IsNotNull(menuElement, "User is not logged in");
+            Header.RequestLoginForm().Login(user.Username, user.Password);
             return this;
         }
 
-        
+        public LoginPage RequestLoginForm()
+        {
+            Header.RequestLoginForm();
+            return new LoginPage(driver);
+        }
+
 
         public void ClickButtonCats()
         {
             buttonCatsCategory.Click();
         }
 
-        public KikaHomepage ClickOnCart()
-        {
-            cartElement.Click();
-            return this;
-        }
-
         
-
-
     }
 }
